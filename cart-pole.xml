@@ -1,0 +1,43 @@
+<mujoco>
+    <!-- 500 Hz simulation -->
+    <option timestep="0.002" />
+    <asset>
+        <texture name="grid" type="2d" builtin="checker" width="512" height="512" rgb1=".3 .4 .5" rgb2=".4 .5 .6"/>
+        <material name="grid" texture="grid" texrepeat="1 1" texuniform="true" reflectance=".2"/>
+        <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0.8 0.9 1" width="512" height="512"/>
+    </asset>
+    <worldbody>
+        <light name="top" pos="0 0 1"/>
+        <!-- <geom name="ground" type="plane" pos="0 0 0" size="2 2 .1" material="grid" solimp=".99 .99 .01" solref=".001 1"/> NOT USED-->
+        
+        <body name="cart" pos="0 0 0.025">
+            <joint name="slide" type="slide" axis="1 0 0" frictionloss="0.0" range="-1 1"/>
+            <geom type="box" size=".1 .05 .025" density="2000" rgba="1 0 0 1"/>
+            <site name="com" pos="0 0 0" size=".01 .01 .01" rgba="1 1 0 1"/>
+            <!-- <camera name="track" pos="0 -.6 .3" xyaxes="1 0 0 0 1 2" mode="track"/> NOT USED -->
+            
+            <body name="pole" pos="0 -.06 0">
+                <joint name="hinge" type="hinge" axis="0 1 0" pos="0 0 0"/>
+                <geom type="box" size=".015 0.005 .3" density="2700" pos="0 0 0.3" rgba="0 0 1 1"/>
+            </body>
+        </body>
+    
+    </worldbody>
+    
+    <actuator>
+        <!-- <velocity name="belt-speed" joint="slide"/>  NOT USED -->
+        <general name="u" site="com" gear="1 0 0 0 0 0" ctrlrange="-20 20" ctrllimited="false" forcelimited="false" actlimited="false"/>
+    </actuator>
+
+    <!-- not used but helpful for making plots -->
+    <sensor>
+        <framepos name="pos" objtype="body" objname="cart"/>
+        <framelinvel name="vel" objtype="body" objname="cart"/>
+        <jointpos name="pole-angle" joint="hinge"/>
+    </sensor>
+
+    <!-- needed for full screen rendering -->
+    <visual>
+        <global offheight="1080" offwidth="1920" />
+    </visual>
+</mujoco>
