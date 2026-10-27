@@ -1,5 +1,7 @@
 # Mujoco Cart Pole
 
+![eval_swingup](eval_swingup.gif)
+
 Goals:
 
 1. Create a sim environment for a custom cart-pole in Mujoco. (`cart-pole.xml`)
