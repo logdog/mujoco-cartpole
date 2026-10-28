@@ -96,7 +96,6 @@ class CartPoleSwingupEnv(gym.Env):
     def reset(self, seed: Optional[int] = None, options: Optional[dict] = None):
         """Reset the environment."""
         super().reset(seed=seed)
-        np.random.seed(seed=seed)
 
         self.terminated = False
         self.truncated = False
@@ -109,10 +108,10 @@ class CartPoleSwingupEnv(gym.Env):
         mujoco.mj_resetData(self.model, self.data)
         
 
-        self.data.qpos = np.array([(2*np.random.rand()-1)*0.1, np.pi+(2*np.random.rand()-1)*np.deg2rad(3) ], dtype=np.float32)
-        self.data.qvel = np.array([(2*np.random.rand()-1)*0.1,       (2*np.random.rand()-1)*np.deg2rad(5)], dtype=np.float32)
+        self.data.qpos = np.array([(2*self.np_random.random()-1)*0.1, np.pi+(2*self.np_random.random()-1)*np.deg2rad(3) ], dtype=np.float32)
+        self.data.qvel = np.array([(2*self.np_random.random()-1)*0.1,       (2*self.np_random.random()-1)*np.deg2rad(5)], dtype=np.float32)
         
-        if np.random.rand() > 1:
+        if self.np_random.random() > 1:
             self.started_up = True
             self.data.qpos[1] -= np.pi # start upright
         else:
@@ -353,13 +352,13 @@ if __name__ == "__main__":
     # More legible printing from numpy.
     np.set_printoptions(precision=3, suppress=True, linewidth=100)
 
-    # env = gym.make("myenv/CartPoleBalance")
-    # # This will catch many common issues; use the raw env to avoid wrapper noise.
-    # try:
-    #     check_env(env.unwrapped)
-    #     print("Environment passes all checks!")
-    # except Exception as e:
-    #     print(f"Environment has issues: {e}")
+    env = gym.make("myenv/CartPoleSwingup")
+    # This will catch many common issues; use the raw env to avoid wrapper noise.
+    try:
+        check_env(env.unwrapped)
+        print("Environment passes all checks!")
+    except Exception as e:
+        print(f"Environment has issues: {e}")
 
     # env.reset()
     # while True:
